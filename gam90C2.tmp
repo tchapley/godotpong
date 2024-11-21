@@ -1,0 +1,73 @@
+[gd_scene load_steps=7 format=3 uid="uid://dn6swh3xkdu22"]
+
+[ext_resource type="Script" path="res://ball.gd" id="1_45kxr"]
+[ext_resource type="Script" path="res://game.gd" id="1_tum1v"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xolbq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wpj0a"]
+size = Vector2(1280, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_degr3"]
+size = Vector2(10, 720)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u1qce"]
+size = Vector2(10, 720)
+
+[node name="game" type="Node2D"]
+script = ExtResource("1_tum1v")
+
+[node name="ball" type="CharacterBody2D" parent="."]
+position = Vector2(303, 80)
+script = ExtResource("1_45kxr")
+width = 20.0
+height = 20.0
+
+[node name="ColorRect" type="ColorRect" parent="ball"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ball"]
+shape = SubResource("RectangleShape2D_xolbq")
+
+[node name="top" type="StaticBody2D" parent="."]
+position = Vector2(640, -5)
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="top"]
+shape = SubResource("RectangleShape2D_wpj0a")
+debug_color = Color(0.968758, 0, 0.465794, 0.42)
+
+[node name="left" type="StaticBody2D" parent="."]
+position = Vector2(640, -5)
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="left"]
+position = Vector2(-645, 365)
+shape = SubResource("RectangleShape2D_degr3")
+metadata/_edit_lock_ = true
+
+[node name="right" type="StaticBody2D" parent="."]
+position = Vector2(640, -5)
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="right"]
+position = Vector2(645, 365)
+shape = SubResource("RectangleShape2D_u1qce")
+metadata/_edit_lock_ = true
+
+[node name="bottom" type="StaticBody2D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="bottom"]
+position = Vector2(640, 725)
+shape = SubResource("RectangleShape2D_wpj0a")
+debug_color = Color(0.968758, 0, 0.465794, 0.42)
+
+[node name="spawn" type="Marker2D" parent="."]
+position = Vector2(640, 360)
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+autostart = true

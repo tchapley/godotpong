@@ -1,0 +1,207 @@
+[gd_scene load_steps=21 format=3 uid="uid://dn6swh3xkdu22"]
+
+[ext_resource type="Script" path="res://ball.gd" id="1_45kxr"]
+[ext_resource type="Script" path="res://game.gd" id="1_tum1v"]
+[ext_resource type="PackedScene" uid="uid://bfhein8ilpn7n" path="res://bounce.tscn" id="3_2nh2c"]
+[ext_resource type="Script" path="res://padde_side.gd" id="3_ax3qj"]
+[ext_resource type="Script" path="res://player_paddle.gd" id="3_n4ira"]
+[ext_resource type="AudioStream" uid="uid://bj5dvq7t8wd3r" path="res://SoundBounce.wav" id="4_bfbtw"]
+[ext_resource type="Script" path="res://ai_paddle.gd" id="4_gv4hc"]
+[ext_resource type="FontFile" uid="uid://cufstu6l8pgeh" path="res://Kenney Blocks.ttf" id="6_mvswj"]
+[ext_resource type="AudioStream" uid="uid://sjyubcb82rjq" path="res://SoundReachGoal.wav" id="9_cihmk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xolbq"]
+
+[sub_resource type="Curve" id="Curve_7bsb0"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+metadata/_snap_enabled = true
+
+[sub_resource type="CurveTexture" id="CurveTexture_le77t"]
+curve = SubResource("Curve_7bsb0")
+
+[sub_resource type="Curve" id="Curve_b3n5b"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ifea6"]
+curve = SubResource("Curve_b3n5b")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hd464"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 0, 0)
+scale_min = 0.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_ifea6")
+color = Color(1, 1, 0.682353, 1)
+alpha_curve = SubResource("CurveTexture_le77t")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wpj0a"]
+size = Vector2(1280, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_degr3"]
+size = Vector2(10, 720)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u1qce"]
+size = Vector2(10, 720)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ufnpo"]
+size = Vector2(10, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_26bpl"]
+size = Vector2(10, 200)
+
+[node name="game" type="Node2D"]
+script = ExtResource("1_tum1v")
+
+[node name="ball" type="CharacterBody2D" parent="."]
+position = Vector2(640, 360)
+script = ExtResource("1_45kxr")
+
+[node name="ColorRect" type="ColorRect" parent="ball"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(10, 10)
+color = Color(1, 1, 0.301961, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ball"]
+shape = SubResource("RectangleShape2D_xolbq")
+
+[node name="trail" type="GPUParticles2D" parent="ball"]
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_hd464")
+
+[node name="bounce" parent="ball" instance=ExtResource("3_2nh2c")]
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="ball"]
+stream = ExtResource("4_bfbtw")
+volume_db = -20.0
+
+[node name="top" type="StaticBody2D" parent="."]
+position = Vector2(640, -5)
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="top"]
+shape = SubResource("RectangleShape2D_wpj0a")
+debug_color = Color(0.968758, 0, 0.465794, 0.42)
+
+[node name="left" type="Area2D" parent="."]
+position = Vector2(640, -5)
+script = ExtResource("3_ax3qj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="left"]
+position = Vector2(-645, 365)
+shape = SubResource("RectangleShape2D_degr3")
+metadata/_edit_lock_ = true
+
+[node name="right" type="Area2D" parent="."]
+position = Vector2(640, -5)
+script = ExtResource("3_ax3qj")
+is_player = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="right"]
+position = Vector2(645, 365)
+shape = SubResource("RectangleShape2D_u1qce")
+metadata/_edit_lock_ = true
+
+[node name="bottom" type="StaticBody2D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="bottom"]
+position = Vector2(640, 725)
+shape = SubResource("RectangleShape2D_wpj0a")
+debug_color = Color(0.968758, 0, 0.465794, 0.42)
+
+[node name="spawn_point" type="Marker2D" parent="."]
+position = Vector2(640, 360)
+
+[node name="start_timer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
+[node name="player_paddle" type="CharacterBody2D" parent="."]
+position = Vector2(1248, 360)
+script = ExtResource("3_n4ira")
+
+[node name="ColorRect" type="ColorRect" parent="player_paddle"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -100.0
+offset_right = 5.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(5, 100)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="player_paddle"]
+shape = SubResource("RectangleShape2D_ufnpo")
+
+[node name="ai_paddle" type="CharacterBody2D" parent="."]
+position = Vector2(32, 360)
+script = ExtResource("4_gv4hc")
+
+[node name="ColorRect" type="ColorRect" parent="ai_paddle"]
+offset_left = -5.0
+offset_top = -100.0
+offset_right = 5.0
+offset_bottom = 100.0
+pivot_offset = Vector2(5, 100)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ai_paddle"]
+shape = SubResource("RectangleShape2D_26bpl")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_right = 1280.0
+offset_bottom = 720.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_constants/separation = 50
+
+[node name="ai_score" type="Label" parent="UI/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_mvswj")
+theme_override_font_sizes/font_size = 46
+text = "0"
+
+[node name="player_score" type="Label" parent="UI/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_mvswj")
+theme_override_font_sizes/font_size = 46
+text = "0"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("9_cihmk")
+volume_db = -20.0
+pitch_scale = 0.72
+
+[connection signal="body_entered" from="left" to="left" method="_on_body_entered"]
+[connection signal="body_entered" from="right" to="right" method="_on_body_entered"]

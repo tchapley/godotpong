@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfhein8ilpn7n"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_oj60r"]
+particle_flag_align_y = true
+particle_flag_disable_z = true
+emission_shape = 2
+emission_sphere_radius = 6.22
+initial_velocity_min = 4.03
+initial_velocity_max = 187.54
+gravity = Vector3(0, 98, 0)
+damping_min = 60.0
+damping_max = 80.0
+scale_max = 2.0
+
+[node name="bounce" type="GPUParticles2D"]
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_oj60r")
+one_shot = true
+explosiveness = 1.0
